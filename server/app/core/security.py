@@ -1,82 +1,54 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import re
+from uuid import uuid4
 
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from app.core.config import settings
 
-# Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
-    """
-    Hash plain password.
-    """
     return pwd_context.hash(password)
 
 
-def verify_password(
-    plain_password: str,
-    hashed_password: str
-) -> bool:
-    """
-    Verify password.
-    """
-    return pwd_context.verify(
-        plain_password,
-        hashed_password
-    )
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
 
 
-def validate_password(password: str):
-    """
-    Password Policy
-
-    Minimum 8 characters
-    1 Uppercase
-    1 Lowercase
-    1 Number
-    1 Special Character
-    """
-
+def validate_password(password: str) -> None:
     if len(password) < 8:
-        raise ValueError(
-            "Password must contain at least 8 characters."
-        )
+        raise ValueError("Password must contain at least 8 characters.")
 
     if not re.search(r"[A-Z]", password):
-        raise ValueError(
-            "Password must contain one uppercase letter."
-        )
+        raise ValueError("Password must contain one uppercase letter.")
 
     if not re.search(r"[a-z]", password):
-        raise ValueError(
-            "Password must contain one lowercase letter."
-        )
+        raise ValueError("Password must contain one lowercase letter.")
 
     if not re.search(r"\d", password):
-        raise ValueError(
-            "Password must contain one number."
-        )
+        raise ValueError("Password must contain one number.")
 
     if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-        raise ValueError(
-            "Password must contain one special character."
-        )
+        raise ValueError("Password must contain one special character.")
 
 
-def create_access_token(data: dict):
-
-    to_encode = data.copy()
-
-    expire = datetime.utcnow() + timedelta(
+def create_access_token(data: dict) -> str:
+    issued_at = datetime.now(timezone.utc)
+    expires_at = issued_at + timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
     )
 
+    to_encode = data.copy()
     to_encode.update(
-        {"exp": expire}
+        {
+            "iat": issued_at,
+            "exp": expires_at,
+            "jti": uuid4().hex,
+            "typ": "access",
+        }
     )
 
     return jwt.encode(
@@ -86,18 +58,25 @@ def create_access_token(data: dict):
     )
 
 
-def verify_token(token: str):
-
+def verify_token(token: str) -> dict | None:
     try:
-
         payload = jwt.decode(
             token,
             settings.SECRET_KEY,
             algorithms=[settings.ALGORITHM],
         )
-
-        return payload
-
     except JWTError:
-
         return None
+
+    if payload.get("typ") != "access":
+        return None
+
+    return payload
+
+
+def get_token_expiry(payload: dict) -> datetime:
+    expires_at = payload.get("exp")
+    if expires_at is None:
+        raise ValueError("Token expiry is missing.")
+
+    return datetime.fromtimestamp(int(expires_at), tz=timezone.utc)

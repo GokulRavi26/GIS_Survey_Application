@@ -39,6 +39,9 @@ venv/
 database/*.db
 database/*.sqlite
 database/*.sqlite3
+server/database/*.db
+server/database/*.sqlite
+server/database/*.sqlite3
 
 ############################
 # Uploaded Images
@@ -55,12 +58,16 @@ client/.env
 client/.env.*
 server/.env
 server/.env.*
+!.env.example
+!server/.env.example
+!client/.env.example
 
 ############################
 # Logs
 ############################
 *.log
 logs/
+server/logs/*.log
 *.pid
 
 ############################
@@ -109,6 +116,7 @@ release/
 # Excel Exports
 ############################
 exports/
+server/exports/
 *.xlsx~
 *.xls~
 

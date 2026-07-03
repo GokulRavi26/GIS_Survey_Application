@@ -1,4 +1,7 @@
-"""Role model (stub)."""
+from enum import StrEnum
 
-class Role:
-    pass
+
+class Role(StrEnum):
+    ADMIN = "ADMIN"
+    SUPERVISOR = "SUPERVISOR"
+    SURVEYOR = "SURVEYOR"

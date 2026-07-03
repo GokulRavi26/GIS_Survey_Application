@@ -1,4 +1,3 @@
-"""Password helpers (stubs)."""
+from app.core.security import hash_password, validate_password, verify_password
 
-def hash_password(pw: str) -> str:
-    return pw
+__all__ = ["hash_password", "validate_password", "verify_password"]
