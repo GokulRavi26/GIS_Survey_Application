@@ -1,0 +1,125 @@
+# ==========================================================
+# GIS Survey Application - .gitignore
+# React + FastAPI + SQLite + Capacitor
+# ==========================================================
+
+############################
+# Node.js / React / Vite
+############################
+client/node_modules/
+client/dist/
+client/.vite/
+client/.cache/
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+
+############################
+# Python
+############################
+server/__pycache__/
+server/*.py[cod]
+server/.pytest_cache/
+server/.mypy_cache/
+server/.coverage
+server/htmlcov/
+
+############################
+# Python Virtual Environment
+############################
+server/venv/
+server/.venv/
+venv/
+.venv/
+
+############################
+# SQLite Database
+############################
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+############################
+# Uploaded Images
+############################
+uploads/
+server/uploads/
+
+############################
+# Environment Variables
+############################
+.env
+.env.*
+client/.env
+client/.env.*
+server/.env
+server/.env.*
+
+############################
+# Logs
+############################
+*.log
+logs/
+*.pid
+
+############################
+# IDE
+############################
+.vscode/
+.idea/
+*.code-workspace
+
+############################
+# OS Files
+############################
+.DS_Store
+Thumbs.db
+desktop.ini
+
+############################
+# Capacitor
+############################
+android/.gradle/
+android/local.properties
+android/app/build/
+android/build/
+android/captures/
+
+ios/Pods/
+ios/build/
+
+############################
+# Build Files
+############################
+build/
+dist/
+release/
+
+############################
+# Temporary Files
+############################
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+############################
+# Excel Exports
+############################
+exports/
+*.xlsx~
+*.xls~
+
+############################
+# Coverage Reports
+############################
+coverage/
+
+############################
+# Miscellaneous
+############################
+*.seed
+*.pid.lock
+__pycache__
